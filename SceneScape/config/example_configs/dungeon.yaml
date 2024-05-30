@@ -1,5 +1,6 @@
 runs_dir: output
-seed: 13
-frames: 10
+seed: 0
+frames: 17
 
-inpainting_prompt: "POV, walkthrough, a medieval dungeon with damp, stone corridors and flickering torches lining the walls, beautiful photo, masterpiece, indoor scene"
+inpainting_prompt: "POV, walkthrough, a castle from sks frozen, masterpiece, indoor scene"
+first_inpainting_prompt: "POV, walkthrough, castle from sks frozen, masterpiece, indoor scene"
