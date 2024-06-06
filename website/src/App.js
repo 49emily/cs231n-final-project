@@ -52,7 +52,7 @@ function App() {
           on content and style resemblance with the target film.
         </div>
       </div>
-      <Carousel className={styles.carousel} afterChange={onChange}>
+      <Carousel arrows className={styles.carousel} afterChange={onChange}>
         <div className={styles.contentStyle}>
           <h2>
             Train from <span className={styles.italic}>Spirited Away</span>

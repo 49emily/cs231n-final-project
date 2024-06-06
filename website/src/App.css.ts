@@ -71,7 +71,7 @@ export const carouselContentDivOne = style({
 
 export const carouselContentDivTwo = style({
   textAlign: "center",
-  width: "60%",
+  width: "55%",
   "@media": {
     "(max-width: 800px)": {
       width: "90%",
