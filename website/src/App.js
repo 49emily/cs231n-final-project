@@ -59,7 +59,7 @@ function App() {
           </h2>
           <div className={styles.carouselContentFlex}>
             <div className={styles.carouselContentDivOne}>
-              <h3>Dreambooth images:</h3>
+              <h3>Few-shot training images:</h3>
               <img className={styles.dreamboothImage} src={spiritedaway0} width="70%" />
               <img className={styles.dreamboothImage} src={spiritedaway1} width="70%" />
               <img className={styles.dreamboothImage} src={spiritedaway2} width="70%" />
@@ -77,7 +77,7 @@ function App() {
           </h2>
           <div className={styles.carouselContentFlex}>
             <div className={styles.carouselContentDivOne}>
-              <h3>Dreambooth images:</h3>
+              <h3>Few-shot training images:</h3>
               <img className={styles.dreamboothImage} src={harrypotter0} width="70%" />
               <img className={styles.dreamboothImage} src={harrypotter1} width="70%" />
               <img className={styles.dreamboothImage} src={harrypotter2} width="70%" />
@@ -94,7 +94,7 @@ function App() {
           </h2>
           <div className={styles.carouselContentFlex}>
             <div className={styles.carouselContentDivOne}>
-              <h3>Dreambooth images:</h3>
+              <h3>Few-shot training:</h3>
               <img className={styles.dreamboothImage} src={marnie0} width="70%" />
               <img className={styles.dreamboothImage} src={marnie1} width="70%" />
               <img className={styles.dreamboothImage} src={marnie2} width="70%" />
@@ -111,7 +111,7 @@ function App() {
           </h2>
           <div className={styles.carouselContentFlex}>
             <div className={styles.carouselContentDivOne}>
-              <h3>Dreambooth images:</h3>
+              <h3>Few-shot training:</h3>
               <img className={styles.dreamboothImage} src={frozen0} width="70%" />
               <img className={styles.dreamboothImage} src={frozen1} width="70%" />
               <img className={styles.dreamboothImage} src={frozen2} width="70%" />
