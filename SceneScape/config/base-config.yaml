@@ -31,14 +31,14 @@ big_resolution: 1024
 init_focal_length: 500
 
 #decoder finetuning parameters
+# finetune_decoder: True
 finetune_decoder: True
 decoder_learning_rate: 0.0001
 num_finetune_decoder_steps: 100
 preservation_weight: 100
 
 #inpainting parameters
-stable_diffusion_checkpoint: "emily49/frozen-stable-diffusion-inpaint" #"dreambooth_models/mountains-sks-1500"
-first_stable_diffusion_checkpoint: "emily49/frozen-stable-diffusion-inpaint"
+
 num_inpainting_steps: 50
 classifier_free_guidance_scale: 7.5
 inpainting_resolution: 600

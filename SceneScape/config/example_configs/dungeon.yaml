@@ -1,6 +1,0 @@
-runs_dir: output
-seed: 0
-frames: 17
-
-inpainting_prompt: "POV, walkthrough, a castle from sks frozen, masterpiece, indoor scene"
-first_inpainting_prompt: "POV, walkthrough, castle from sks frozen, masterpiece, indoor scene"

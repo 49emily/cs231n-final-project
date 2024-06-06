@@ -11,6 +11,7 @@ import trimesh
 from PIL import Image
 from diffusers import (
     StableDiffusionInpaintPipeline,
+    AutoPipelineForInpainting,
     StableDiffusionControlNetInpaintPipeline,
     DDIMScheduler,
     AutoencoderKL,
@@ -58,27 +59,48 @@ class WarpInpaintModel(torch.nn.Module):
         self.config = config
         self.inpainting_prompt = config["inpainting_prompt"]
 
-        # controlnet = ControlNetModel.from_pretrained(
-        #     "lllyasviel/control_v11p_sd15_inpaint", torch_dtype=torch.float32
-        # )
-        # self.inpainting_pipeline = StableDiffusionControlNetInpaintPipeline.from_pretrained(
-        self.inpainting_pipeline = StableDiffusionInpaintPipeline.from_pretrained(
-            config["stable_diffusion_checkpoint"],
-            safety_checker=None,
-            torch_dtype=torch.float32,
-            # controlnet=controlnet,
+        controlnet = ControlNetModel.from_pretrained(
+            "lllyasviel/control_v11p_sd15_inpaint", torch_dtype=torch.float32
         )
+
+        # self.inpainting_pipeline = StableDiffusionInpaintPipeline.from_pretrained(
+        self.inpainting_pipeline = (
+            StableDiffusionControlNetInpaintPipeline.from_pretrained(
+                self.config["stable_diffusion_checkpoint"],
+                safety_checker=None,
+                torch_dtype=torch.float32,
+                controlnet=controlnet,
+            )
+        )
+
+        # self.inpainting_pipeline = AutoPipelineForInpainting.from_pretrained(
+        #     config["stable_diffusion_checkpoint"],
+        #     safety_checker=None,
+        #     # torch_dtype=torch.float16,
+        #     torch_dtype=torch.float32,
+        #     # revision="fp16",
+        # )
         self.inpainting_pipeline.scheduler = DDIMScheduler.from_config(
             self.inpainting_pipeline.scheduler.config
         )
         self.inpainting_pipeline = self.inpainting_pipeline.to(self.device)
+        # self.inpainting_pipeline.load_ip_adapter(
+        #     "h94/IP-Adapter", subfolder="models", weight_name="ip-adapter_sd15.bin"
+        # )
+
+        # scale = {
+        #     # "down": {"block_2": [0.0, 1.0]},
+        #     "up": {"block_0": [0.0, 1.0, 0.0]},
+        # }
+
+        # self.inpainting_pipeline.set_ip_adapter_scale(0.7)
         if self.config["use_xformers"]:
             self.inpainting_pipeline.set_use_memory_efficient_attention_xformers(True)
 
         mask_full = Image.new("RGB", (512, 512), "white")
         # EMILY: use the non-inpainting model for first iteration
         first_inpaint_pipeline = StableDiffusionInpaintPipeline.from_pretrained(
-            config["first_stable_diffusion_checkpoint"],
+            self.config["stable_diffusion_checkpoint"],
             safety_checker=None,
             torch_dtype=torch.float32,
             # revision="fp16",
@@ -86,13 +108,18 @@ class WarpInpaintModel(torch.nn.Module):
         first_inpaint_pipeline.scheduler = DDIMScheduler.from_config(
             first_inpaint_pipeline.scheduler.config
         )
+        # image = first_inpaint_pipeline(
+        first_inpaint_pipeline = first_inpaint_pipeline.to(self.device)
+        ip_adapter_image = Image.open("assets/1.jpg")
         image = first_inpaint_pipeline(
-            prompt=config["first_inpainting_prompt"],
+            # prompt=config["first_inpainting_prompt"],
+            prompt=self.config["inpainting_prompt"],
             negative_prompt=self.config["negative_inpainting_prompt"],
             image=mask_full,
             mask_image=mask_full,
             num_inference_steps=self.config["num_inpainting_steps"],
             guidance_scale=self.config["classifier_free_guidance_scale"],
+            # ip_adapter_image=ip_adapter_image,
         ).images[0]
         self.image_tensor = ToTensor()(image).unsqueeze(0).to(self.device)
 
@@ -808,6 +835,9 @@ class WarpInpaintModel(torch.nn.Module):
         assert (
             image.shape[0:1] == image_mask.shape[0:1]
         ), "image and image_mask must have the same image size"
+
+        kernel = np.ones((5, 5), np.uint8)
+        image_mask = cv2.dilate(image_mask, kernel, iterations=3)
         image[image_mask > 0.5] = -1.0  # set as masked pixel
         image = np.expand_dims(image, 0).transpose(0, 3, 1, 2)
         image = torch.from_numpy(image)
@@ -815,14 +845,18 @@ class WarpInpaintModel(torch.nn.Module):
 
     @torch.no_grad()
     def inpaint(self, warped_image, inpaint_mask):
-        # control_image = self.make_inpaint_condition(
-        #     ToPILImage()(warped_image[0]), ToPILImage()(inpaint_mask[0])
-        # )
+        control_image = self.make_inpaint_condition(
+            ToPILImage()(warped_image[0]), ToPILImage()(inpaint_mask[0])
+        )
+        kernel = np.ones((5, 5), np.uint8)
+        mask = np.array(ToPILImage()(inpaint_mask[0]).convert("L")).astype(np.float32)
+        mask = cv2.dilate(mask, kernel, iterations=3)
+        ip_adapter_image = Image.open("assets/1.jpg")
         inpainted_images = self.inpainting_pipeline(
             prompt=self.inpainting_prompt,
             negative_prompt=self.config["negative_inpainting_prompt"],
             image=ToPILImage()(warped_image[0]),
-            mask_image=ToPILImage()(inpaint_mask[0]),
+            mask_image=ToPILImage()(mask),
             num_inference_steps=self.config["num_inpainting_steps"],
             callback_steps=self.config["num_inpainting_steps"] - 1,
             callback=self.latent_storer,
@@ -830,7 +864,9 @@ class WarpInpaintModel(torch.nn.Module):
             num_images_per_prompt=1,
             height=self.config["inpainting_resolution"],
             width=self.config["inpainting_resolution"],
-            # control_image=control_image,
+            control_image=control_image,
+            controlnet_conditioning_scale=1.0,
+            # ip_adapter_image=ip_adapter_image,
         ).images
 
         best_index = 0
