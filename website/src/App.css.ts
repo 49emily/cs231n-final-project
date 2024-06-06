@@ -2,7 +2,7 @@ import { style } from "@vanilla-extract/css";
 
 export const app = style({
   textAlign: "center",
-  padding: "2em",
+  paddingTop: "2em",
 });
 
 export const nameContainer = style({
@@ -23,7 +23,7 @@ export const nameDiv = style({
 
 export const contentStyle = style({
   textAlign: "center",
-  background: "lightgray",
+
   //   height: "60vh",
   padding: "1em 1em 3em 1em",
 });
@@ -43,7 +43,13 @@ export const abstract = style({
 });
 
 export const carousel = style({
+  background: "#B4CAD1",
   margin: "5%",
+  "@media": {
+    "(max-width: 800px)": {
+      margin: "5% 0",
+    },
+  },
 });
 
 export const carouselContentFlex = style({
