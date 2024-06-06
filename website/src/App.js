@@ -66,7 +66,7 @@ function App() {
             </div>
             <div className={styles.carouselContentDivTwo}>
               <h3>Generated walkthrough:</h3>
-              <video src={spiritedaway} width="90%" controls="controls" autoplay />
+              <video src={spiritedaway} width="90%" controls autoplay />
             </div>
           </div>
         </div>
@@ -84,7 +84,7 @@ function App() {
             </div>
             <div className={styles.carouselContentDivTwo}>
               <h3>Generated walkthrough:</h3>
-              <video src={harrypotter} width="90%" controls="controls" autoplay />
+              <video src={harrypotter} width="90%" controls autoplay />
             </div>
           </div>
         </div>
@@ -101,7 +101,7 @@ function App() {
             </div>
             <div className={styles.carouselContentDivTwo}>
               <h3>Generated walkthrough:</h3>
-              <video src={marnie} width="90%" controls="controls" autoplay />
+              <video src={marnie} width="90%" controls autoplay />
             </div>
           </div>
         </div>
@@ -118,7 +118,7 @@ function App() {
             </div>
             <div className={styles.carouselContentDivTwo}>
               <h3>Generated walkthrough:</h3>
-              <video src={frozen} width="90%" controls="controls" autoplay />
+              <video src={frozen} width="90%" controls autoplay />
             </div>
           </div>
         </div>
