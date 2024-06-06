@@ -7,7 +7,14 @@ export const app = style({
 
 export const nameContainer = style({
   display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
   flexDirection: "row",
+  "@media": {
+    "(max-width: 800px)": {
+      flexDirection: "column",
+    },
+  },
 });
 
 export const nameDiv = style({
@@ -18,19 +25,19 @@ export const contentStyle = style({
   textAlign: "center",
   background: "lightgray",
   //   height: "60vh",
-  padding: "0em 1em 3em 1em",
+  padding: "1em 1em 3em 1em",
 });
 
 export const abstract = style({
   textAlign: "center",
   //   height: "60vh",
   //   padding: "0em 1em 3em 1em",
-  margin: "0 auto",
+  margin: "3em auto 0 auto",
   width: "50%",
 
   "@media": {
     "(max-width: 800px)": {
-      width: "90%",
+      width: "80%",
     },
   },
 });
@@ -44,6 +51,7 @@ export const carouselContentFlex = style({
   flexDirection: "row",
   justifyContent: "space-around",
   alignItems: "center",
+  padding: "1em",
   "@media": {
     "(max-width: 800px)": {
       flexDirection: "column",
@@ -51,6 +59,29 @@ export const carouselContentFlex = style({
   },
 });
 
+export const carouselContentDivOne = style({
+  textAlign: "center",
+  width: "40%",
+  "@media": {
+    "(max-width: 800px)": {
+      width: "70%",
+    },
+  },
+});
+
+export const carouselContentDivTwo = style({
+  textAlign: "center",
+  width: "60%",
+  "@media": {
+    "(max-width: 800px)": {
+      width: "90%",
+    },
+  },
+});
 export const italic = style({
   fontStyle: "italic",
+});
+
+export const dreamboothImage = style({
+  margin: "0 auto",
 });
