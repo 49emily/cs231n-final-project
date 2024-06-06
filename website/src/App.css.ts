@@ -64,7 +64,7 @@ export const carouselContentDivOne = style({
   width: "40%",
   "@media": {
     "(max-width: 800px)": {
-      width: "70%",
+      width: "90%",
     },
   },
 });
