@@ -2,7 +2,7 @@ import { style } from "@vanilla-extract/css";
 
 export const app = style({
   textAlign: "center",
-  padding: "2%",
+  padding: "2em",
 });
 
 export const nameContainer = style({
